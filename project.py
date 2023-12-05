@@ -1,10 +1,24 @@
 # from language_model import LanguageModel
 # from helpers import extract_code
 
+
 from openai import OpenAI
-client = OpenAI()
+import os
+from dotenv import load_dotenv
+import json
+import numpy as np
+import time
+
+load_dotenv()
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+)
 
 role = "You are an expert computer science researcher and programmer, especially skilled at optimizing algorithms."
+
+prompt_count = 0
+
 
 def prompt(message,temperature):
     response = client.chat.completions.create(
@@ -17,6 +31,7 @@ def prompt(message,temperature):
     temperature=temperature
     )
     print(response.choices[0].message.content)
+    # prompt_count += 1
     return response.choices
 
 import re
@@ -28,14 +43,18 @@ def extract_code(responses):
     """
 
     solutions = []
-    pattern = r'```python(.*?)```'  # Regex pattern to extract Python code blocks
-
-    for response in responses:
-        matches = re.findall(pattern, response.message.content, re.DOTALL)
-        solutions.extend(matches)
-
+    pattern = re.compile(r'python(.*)```', re.DOTALL)  # Regex pattern to extract Python code blocks
+    print('YESSIR')
+    response = str(responses[0].message.content)
+    print(response)
+    matches = re.findall(pattern, response)
+    print('FOUND REGEX\n', matches)
+    solutions.append(matches)
+    print("EXTRACTED CODE\n", solutions)
+    
     return solutions
 
+# SEED IMPROVER
 initial_solution = \
 """
 def improve_algorithm(initial_solution, utility_str, utility):
@@ -52,8 +71,12 @@ def improve_algorithm(initial_solution, utility_str, utility):
     When run, your script must define an improved solution. Try to be as creative as possible under the constraints.
     Your primary improvement must be novel and non-trivial. First, propose an idea for an improvement, then implement it.\"""
     new_solutions = prompt(message, temperature=0.7)
+    print("BEFORE EXTRACT CODE")
     new_solutions = extract_code(new_solutions)
+    print(new_solutions)
+    
     best_solution, best_utility = initial_solution, 0
+
     for new_solution in new_solutions:
         utility_val = utility(new_solution)
         if utility_val > best_utility:
@@ -90,7 +113,7 @@ def meta_utility(improve_str: str):
 """
 
 
-def improve_algorithm(initial_solution, utility_str, utility):
+def improve_algorithm_1(initial_solution, utility_str, utility): # NOT USING, SAME AS STRING ABOVE
     """Improves a solution according to a utility function."""
     role = "You are an expert computer science researcher and programmer, especially skilled at optimizing algorithms."
     message = f"""You must improve the following code. You will be evaluated based on a following score function: 
@@ -106,6 +129,7 @@ def improve_algorithm(initial_solution, utility_str, utility):
     
     new_solutions = prompt(message, temperature=0.7)
     new_solutions = extract_code(new_solutions)
+    print('NEW_SOLUTION')
     best_solution, best_utility = initial_solution, 0
     for new_solution in new_solutions:
         utility_val = utility(new_solution)
@@ -119,23 +143,38 @@ def meta_utility(improve_str: str):
     Evaluates the algorithm in improve_str to improve the algorithm in algorithm_str, 
     according to some downstream utility function. 
     """
-    if meta_utility.uses > meta_utility.budget:
-        return 0
-    meta_utility.increment_uses()
+    # if meta_utility.uses > meta_utility.budget:
+    #     return 0
+    # meta_utility.increment_uses()
 
     n_tests = 1
     expected_utility = 0
+    print('metautl')
     for _ in range(n_tests):
-        if utility.uses >= utility.budget:
-            break
-        try:
-            exec(improve_str, globals())  # Define improve_algorithm function
-            # At most 6 calls to language model, and at most 6 samples each time
-            # language_model = LanguageModel(budget=6, max_responses_per_call=6)
-            improved_algorithm_str = improve_algorithm(algorithm_str, utility_str, utility)
-            expected_utility += utility(improved_algorithm_str) / n_tests
-        except:
-            continue
+        exec(improve_str, globals())
+        improved_algorithm_str = improve_algorithm(algorithm_str, utility_str, utility)
+        print('[IMRPOVE ALGO]')
+        print(improved_algorithm_str)
+        expected_utility += utility(improved_algorithm_str) / n_tests
+    
+        # if utility.uses >= utility.budget:
+        #     break
+        # try:
+        #     # exec(improve_str, globals())  # Define improve_algorithm function
+        #     # At most 6 calls to language model, and at most 6 samples each time
+        #     # language_model = LanguageModel(budget=6, max_responses_per_call=6)
+        #     improved_algorithm_str = improve_algorithm_1(algorithm_str, utility_str, utility)
+        #     print('[IMRPOVE ALGO]')
+        #     print(improved_algorithm_str)
+        #     expected_utility += utility(improved_algorithm_str) / n_tests
+
+
+
+
+
+        # except:
+        #     print('EXEPTION IN METAUTILITY')
+        #     continue
         
     return expected_utility
 
@@ -216,3 +255,10 @@ Here is the current solution:
 When run, your script must define an improved solution. Try to be as creative as possible under the constraints.
 Your primary improvement must be novel and non-trivial. First, propose an idea for an improvement, then implement it."""
 print(message)
+
+
+print("--------------------------------------")
+print()
+print('-----------------------')
+
+meta_utility(initial_solution)
