@@ -32,7 +32,7 @@ def prompt(message,temperature):
     ],
     temperature=temperature
     )
-    print(response.choices[0].message.content)
+    # print(response.choices[0].message.content)
     # prompt_count += 1
     return response.choices
 
@@ -51,25 +51,25 @@ def improve_algorithm(initial_solution, utility_str, utility):
     {initial_solution}
     ‘‘‘
     When run, your script must define an improved solution. Try to be as creative as possible under the constraints.
-    Your primary improvement must be novel and non-trivial. First, propose an idea for an improvement, then implement it.\"""
-    print("PROMPTING NEW SOLUTIONS")
+    Your primary improvement must be novel and non-trivial. First, propose an idea for an improvement, then implement it.
+    DO NOT output a utility function.\"""
+    print("[PROMPTING NEW SOLUTIONS]")
     new_solutions = prompt(message, temperature=0.7)
-    print("[BEFORE EXTRACT CODE]")
+
     new_solutions = extract_code(new_solutions)
-    print("[NEW SOLUTIONS]")
-    print(new_solutions)
     
     best_solution, best_utility = initial_solution, 0
 
     for new_solution in new_solutions:
-        print("[EVAL NEW SOLUTION]")
-        print(new_solution)
-        utility_val = utility(new_solution) ### StUCK HERE
-        print("[UTIL VALUE]", utility_val)
+        utility_val = utility(new_solution) 
+        print("[BEST UTILITY BEFORE EVAL]", best_utility)
         if utility_val > best_utility:
             best_solution = new_solution
             best_utility = utility_val
-    return best_solution"""
+            print("[BEST SOLUTION UTIL]:", best_utility)
+            print("[BEST SOLUTION]:", best_solution)
+    return best_solution
+"""
 
 meta_utility_str = \
 """
@@ -129,7 +129,7 @@ def meta_utility(improve_str: str):
 
 # INITIAL
 algorithm_str = """
-def algorithm(a, b , c):
+def algorithm(a):
     return a
 """
 
@@ -141,7 +141,7 @@ def meta_utility(improve_str: str):
     # if meta_utility.uses > meta_utility.budget:
     #     return 0
     # meta_utility.increment_uses()
-
+    global algorithm_str
     n_tests = 2
     expected_utility = 0
     print('metautl')
@@ -149,8 +149,6 @@ def meta_utility(improve_str: str):
         exec(improve_str, globals())
         improved_algorithm_str = improve_algorithm(algorithm_str, utility_str, utility)
 
-        print('[IMRPOVE ALGO]')
-        print(improved_algorithm_str)
         expected_utility += utility(improved_algorithm_str) / n_tests
     
         # if utility.uses >= utility.budget:

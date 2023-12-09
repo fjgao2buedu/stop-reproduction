@@ -13,6 +13,5 @@ def extract_code(responses):
     matches = re.findall(pattern, response)
 
     solutions.append(matches[0])
-    print("[EXTRACTED CODE]\n", solution)
     
     return solutions
