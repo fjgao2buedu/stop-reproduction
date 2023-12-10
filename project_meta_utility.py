@@ -2,7 +2,6 @@ from task_utility import utility, utility_str
 from task import algorithm_str,algorithm_score
 
 def meta_utility(improve_str: str):
-    print("improve_str: "+ improve_str)
     print("project_meta_utility: [META_UTILITY]")
     """
     Evaluates the algorithm in improve_str to improve the algorithm in algorithm_str,
