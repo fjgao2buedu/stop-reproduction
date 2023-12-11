@@ -1,5 +1,5 @@
 from task_utility import utility, utility_str
-from task import algorithm_str,algorithm_score
+from task import algorithm_str, algorithm_score
 
 def meta_utility(improve_str: str):
     print("project_meta_utility: [META_UTILITY]")
@@ -15,6 +15,10 @@ def meta_utility(improve_str: str):
     expected_utility = 0
     for _ in range(n_tests):
         exec(improve_str, globals())
+        print("project_meta_utility: [ALGO BEFORE IMPROVEMENT]")
+        print(algorithm_str)
+        print("project_meta_utility: [ALGO SCORE BEFORE IMPROVEMENT]")
+        print(algorithm_score)
         improved_algorithm_str,improved_algorithm_utility = improve_algorithm(algorithm_str, algorithm_score, utility_str, utility)
         expected_algorithm_str = improved_algorithm_str
         expected_utility += improved_algorithm_utility / n_tests

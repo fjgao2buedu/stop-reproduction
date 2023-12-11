@@ -18,7 +18,7 @@ def prompt(message, temperature):
     prompt_count += 1
     if not debug:
         response = client.chat.completions.create(
-            model="gpt-4-0314",  # gpt-4-0314
+            model="gpt-4-0314", 
             response_format={"type": "text"},
             messages=[
                 {"role": "system", "content": role},
@@ -26,6 +26,7 @@ def prompt(message, temperature):
             ],
             temperature=temperature,
         )
+        print(response.choices[0].message.content)
         print(f"helpers: [PROMPTING {prompt_count} SUCCESSFUL]")
         return response.choices
     raise

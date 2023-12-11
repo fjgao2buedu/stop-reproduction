@@ -1,9 +1,9 @@
 import random
 import time
-
 import numpy as np
 
 
+<<<<<<< Updated upstream
 from task_lpn import lpn_algorithm_str,lpn_algorithm_score
 
 def utility(algorithm_str: str):
@@ -66,16 +66,22 @@ lpn_algorithm_score = {improved_algorithm_utility}
     return expected_utility
 """
 
+=======
+>>>>>>> Stashed changes
 # def utility(algorithm_str: str):
 #     """
 #     Implements the sort utility function. Returns the score.
 #     If the algorithm requires more than 100 milliseconds to run per test, it is a failure.
 #     """
 
+<<<<<<< Updated upstream
 #     exec(algorithm_str, globals())
+=======
+>>>>>>> Stashed changes
 #     try:
 #         exec(algorithm_str, globals())
 #     except:
+#         print("task_utility: [EXEC Algorithm_str NOT WORKING] RETURNING 0")
 #         return 0
     
 #     A = np.array([17, 15, 61, 81, 86, 41, 97, 58, 74, 32, 18, 91, 10, 28, 72, 16, 3,
