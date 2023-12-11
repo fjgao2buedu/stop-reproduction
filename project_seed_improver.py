@@ -18,11 +18,12 @@ def improve_algorithm(initial_solution, initial_score, utility_str, utility):
     ‘‘‘
     When run, your script must define an improved solution. Try to be as creative as possible under the constraints.
     Your primary improvement must be novel and non-trivial. First, propose an idea for an improvement, then implement it.
-    DO NOT output a utility function.
+    You are not allowed to output a "utility" python function. DO NOT remove "from helpers import extract_code, prompt".
     """
     new_solutions = prompt(message, temperature=0.7)
     new_solutions = extract_code(new_solutions)
     best_solution, best_utility = initial_solution, initial_score
+    print("project_seed_improver: [NEW SOLUTION]", new_solutions[0])
     for new_solution in new_solutions:
         utility_val = utility(new_solution)
         print("project_seed_improver: [BEST UTILITY BEFORE EVAL]", best_utility)

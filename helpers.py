@@ -10,7 +10,7 @@ client = OpenAI(
 )
 prompt_count = 0
 role = "You are an expert computer science researcher and programmer, especially skilled at optimizing algorithms."
-debug = True
+debug = False
 
 def prompt(message, temperature):
     global prompt_count
@@ -18,7 +18,7 @@ def prompt(message, temperature):
     prompt_count += 1
     if not debug:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",  # gpt-4-0314
+            model="gpt-4-0314",  # gpt-4-0314
             response_format={"type": "text"},
             messages=[
                 {"role": "system", "content": role},
@@ -28,6 +28,7 @@ def prompt(message, temperature):
         )
         print(f"helpers: [PROMPTING {prompt_count} SUCCESSFUL]")
         return response.choices
+    raise
     response_choices = ["```pythondef algorithm(a): return sorted(a)```"]
 
     # print(response.choices[0].message.content)
@@ -46,9 +47,10 @@ def extract_code(responses):
     pattern = re.compile(r"```python(.*)```", re.DOTALL)  # Regex pattern to extract Python code blocks
     if not debug:
         response = str(responses[0].message.content)
-    response = str(responses[0])
+    else:
+        response = str(responses[0])
     matches = re.findall(pattern, response)
 
     solutions.append(matches[0])
-
+    print("helpers: [EXTRACTING CODE SUCCESSFUL]")
     return solutions

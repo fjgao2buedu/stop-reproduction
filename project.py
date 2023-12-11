@@ -121,8 +121,7 @@ file.close()
 sol,score = meta_utility(initial_solution)
 
 file = open("task.py", "w")
-stuff = \
-f"""
+stuff = f"""
 algorithm_str = \"""{sol}\"""
 algorithm_score = {score}
 """
