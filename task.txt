@@ -47,3 +47,13 @@ def improve_algorithm(initial_solution, initial_score, utility_str, utility):
 
 """
 algorithm_score = 0
+
+
+
+## String Grid Dist.
+
+algorithm_str = """
+def algorithm(t: str, dist: int):
+    return t
+"""
+algorithm_score = 0
