@@ -3,7 +3,6 @@ import time
 import numpy as np
 
 
-<<<<<<< Updated upstream
 from task_lpn import lpn_algorithm_str,lpn_algorithm_score
 
 def utility(algorithm_str: str):
@@ -66,18 +65,13 @@ lpn_algorithm_score = {improved_algorithm_utility}
     return expected_utility
 """
 
-=======
->>>>>>> Stashed changes
 # def utility(algorithm_str: str):
 #     """
 #     Implements the sort utility function. Returns the score.
 #     If the algorithm requires more than 100 milliseconds to run per test, it is a failure.
 #     """
 
-<<<<<<< Updated upstream
 #     exec(algorithm_str, globals())
-=======
->>>>>>> Stashed changes
 #     try:
 #         exec(algorithm_str, globals())
 #     except:
