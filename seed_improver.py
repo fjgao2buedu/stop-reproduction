@@ -23,14 +23,14 @@ def improve_algorithm(initial_solution, initial_score, utility_str, utility):
     new_solutions = prompt(message, temperature=0.7)
     new_solutions = extract_code(new_solutions)
     best_solution, best_utility = initial_solution, initial_score
-    print("project_seed_improver: [NEW SOLUTION]", new_solutions[0])
+    print("seed_improver: [NEW SOLUTION]", new_solutions[0])
     for new_solution in new_solutions:
         utility_val = utility(new_solution)
-        print("project_seed_improver: [BEST UTILITY BEFORE EVAL]", best_utility)
-        print("project_seed_improver: [CURR UTILITY ]", utility_val)
+        print("seed_improver: [BEST UTILITY BEFORE EVAL]", best_utility)
+        print("seed_improver: [CURR UTILITY ]", utility_val)
         if utility_val > best_utility:
             best_solution = new_solution
             best_utility = utility_val
-            print("project_seed_improver: [BEST SOLUTION UTILITY]:", best_utility)
-            print("project_seed_improver: [BEST SOLUTION]:", best_solution)
+            print("seed_improver: [BEST SOLUTION UTILITY]:", best_utility)
+            print("seed_improver: [BEST SOLUTION]:", best_solution)
     return best_solution, best_utility
